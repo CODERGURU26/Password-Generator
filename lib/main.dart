@@ -1,5 +1,7 @@
+
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Import for clipboard functionality
 
 void main() {
   runApp(PasswordGeneratorApp());
@@ -50,6 +52,14 @@ class _PasswordGeneratorState extends State<PasswordGenerator> {
     final length = _passwordLength.toInt();
     setState(() {
       _generatedPassword = _generatePassword(length);
+    });
+  }
+
+  void _copyToClipboard() {
+    Clipboard.setData(ClipboardData(text: _generatedPassword)).then((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Password copied to clipboard!')),
+      );
     });
   }
 
@@ -140,6 +150,11 @@ class _PasswordGeneratorState extends State<PasswordGenerator> {
                 style: TextStyle(fontSize: 24, color: Colors.blue),
                 textAlign: TextAlign.center,
               ),
+            ),
+            SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: _copyToClipboard,
+              child: Text('Copy Password'),
             ),
           ],
         ),
